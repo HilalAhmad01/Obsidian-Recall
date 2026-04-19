@@ -156,10 +156,10 @@ def getfile(description, vectorstore):
         full_path = doc.metadata.get('source', 'Unknown')
         found_files.add(os.path.basename(full_path))
 
-    # 3. Display the clean results to the user
-    print(f"\n📂 Files containing info about '{description}':")
+    
+    print(f"\n Files containing info about '{description}':")
     for filename in sorted(found_files):
-        print(f" 🎯 {filename}")
+        print(f"  {filename}")
 
 
 def get_vectorstore():
