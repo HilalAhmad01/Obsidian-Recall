@@ -144,6 +144,22 @@ def handle_flashcards(filename, vectorstore, llm):
     response = chain.invoke(os.path.basename(full_path))
     print(f"\n✨ YOUR STUDY CARDS:\n{response}")
 
+def getfile(description, vectorstore):
+    results = vectorstore.similarity_search(description, k=3)
+    
+    if not results:
+        print(f"🔍 No notes found related to: '{description}'")
+        return
+
+    found_files = set()
+    for doc in results:
+        full_path = doc.metadata.get('source', 'Unknown')
+        found_files.add(os.path.basename(full_path))
+
+    # 3. Display the clean results to the user
+    print(f"\n📂 Files containing info about '{description}':")
+    for filename in sorted(found_files):
+        print(f" 🎯 {filename}")
 
 
 def get_vectorstore():
@@ -246,6 +262,12 @@ def chat_loop(vectorstore):
                     handle_summarize_file(args[0], vectorstore, llm)
                 else:
                     print("Please provide a filename. Example: /summarize_file Project.md")
+                
+            elif command == "/find":
+                if args:
+                    getfile(" ".join(args), vectorstore)
+                else:
+                    print("⚠️ Please provide a description. Example: /find architecture of mlops")
 
             elif command == "/flashcards":
                 if args:
