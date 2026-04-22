@@ -1,19 +1,277 @@
-# Obsidian Recall 🧠
-An AI-powered Copilot for local Obsidian vaults, built for high-speed retrieval and exam preparation.
+<div align="center">
 
-## 🚀 Features
-- **Incremental Loading:** Only indexes new notes to save on API credits and CPU.
-- **Flashcard Generation:** Automatically creates study questions from technical notes.
-- **Topic Summarization:** Uses RAG to synthesize information across multiple files.
+# 🧠 Obsidian Recall
+
+### An AI-powered Copilot that lives inside your Obsidian vault.
+
+**Chat with your notes. Generate flashcards. Summarize topics. All locally.**
+
+[![Python](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/summarize%20command.png)
+[![LangChain](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/flashcard.png)
+[![ChromaDB](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/summarize%20command.png)
+
+
+</div>
+
+---
+
+## 📖 What is this?
+
+**Obsidian Recall** turns your static Markdown notes into a living, queryable knowledge base — directly inside Obsidian's sidebar. Point it at your vault, sync once, and you can:
+
+- **Ask questions** about anything you've ever written
+- **Summarize** entire files or broad topics with one command
+- **Generate flashcards** from technical notes for active recall
+- **Find files** by describing what's in them, not by remembering the name
+
+It runs **100% locally** — your notes never leave your machine. The only external call is to the Cohere API for embeddings.
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+|---|---|
+| 🔄 **Incremental Sync** | Only indexes new notes. Saves Cohere API credits and CPU on every sync. |
+| 💬 **RAG Chat** | Ask natural language questions, get answers grounded in your actual notes. |
+| 📄 **File Summarization** | Condense any single note into clean key takeaways instantly. |
+| 🌐 **Topic Summarization** | Synthesize information spread across multiple files on any subject. |
+| 🃏 **Flashcard Generation** | Auto-generate Q&A study cards from technical notes for exam prep. |
+| 🔍 **Semantic File Search** | Find files by describing their content — no exact filename needed. |
+| 📋 **Vault Index** | See every file the AI can currently "see" and interact with. |
+| 🖥️ **Obsidian Sidebar UI** | A clean, native-feeling panel built directly into Obsidian. |
+
+---
 
 ## 🛠️ Tech Stack
-- **LLM:** Gemma 2B (via Ollama)
-- **Embeddings:** Cohere v4
-- **Vector Database:** ChromaDB
-- **Framework:** LangChain
 
-## 🖥️ Setup
-1. Clone the repo: `git clone https://github.com/HilalAhmad01/Obsidian-Recall.git`
-2. Install dependencies: `pip install -r requirements.txt`
-3. Add your `.env` file with `COHERE_API_KEY`.
-4. Run: `python main.py`
+```
+┌─────────────────────────────────────────────────────┐
+│                   Obsidian Plugin                   │  ← main.ts (TypeScript)
+│              Sidebar UI + Command Router             │
+└─────────────────────────┬───────────────────────────┘
+                          │ HTTP (localhost:8000)
+┌─────────────────────────▼───────────────────────────┐
+│                  FastAPI Server                     │  ← server.py
+│            REST API + LangChain Chains              │
+└──────┬────────────────────────────┬─────────────────┘
+       │                            │
+┌──────▼──────┐             ┌───────▼───────┐
+│   Ollama    │             │    ChromaDB   │
+│  Gemma 2B   │             │  Vector Store │  ← ./chroma_db
+│    (LLM)    │             │  (cosine sim) │
+└─────────────┘             └───────┬───────┘
+                                    │
+                            ┌───────▼───────┐
+                            │    Cohere     │
+                            │  Embeddings   │
+                            │   embed-v4.0  │
+                            └───────────────┘
+```
+
+---
+
+## 📁 Project Structure
+
+```
+obsidian-recall/
+│
+├── main.py              # Core logic: loading, embedding, RAG chains, commands
+├── server.py            # FastAPI server exposing all features as REST endpoints
+├── main.ts              # Obsidian plugin (TypeScript) — the sidebar UI
+│
+├── chroma_db/           # Auto-generated: persisted vector store (gitignored)
+├── .env                 # Your API keys (gitignored)
+├── requirements.txt     # Python dependencies
+└── README.md
+```
+
+---
+
+## 🚀 Setup & Installation
+
+### Prerequisites
+
+Make sure you have these installed before you begin:
+
+- [Python 3.10+](https://www.python.org/downloads/)
+- [Ollama](https://ollama.com/) with Gemma 2B pulled
+- [Node.js](https://nodejs.org/) (for building the Obsidian plugin)
+- An active [Cohere API Key](https://dashboard.cohere.com/)
+
+---
+
+### Step 1 — Clone the Repository
+
+```bash
+git clone https://github.com/HilalAhmad01/Obsidian-Recall.git
+cd Obsidian-Recall
+```
+
+### Step 2 — Install Python Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Step 3 — Pull the LLM via Ollama
+
+```bash
+ollama pull gemma2:2b
+```
+
+### Step 4 — Configure Your Environment
+
+Create a `.env` file in the root of the project:
+
+```env
+COHERE_API_KEY=your_cohere_api_key_here
+```
+
+### Step 5 — Set Your Vault Path
+
+Open `main.py` and `server.py` and update the vault path to point to your Obsidian notes folder:
+
+```python
+# In main.py and server.py, find this line and update it:
+vault_path = "/your/path/to/Notes"   # ← change this
+```
+
+### Step 6 — Build & Install the Obsidian Plugin
+
+Copy `main.ts` (compiled to `main.js`) into your vault's plugin folder:
+
+```
+YourVault/.obsidian/plugins/obsidian-recall/main.js
+```
+
+Then go to **Obsidian → Settings → Community Plugins** and enable **Obsidian Recall**.
+
+### Step 7 — Start the Server
+
+```bash
+python server.py
+```
+
+The API will be live at `http://127.0.0.1:8000`.
+
+### Step 8 — Sync Your Vault
+
+Click the **🔄 Sync** button in the Obsidian sidebar to index your notes for the first time. This only needs to run fully once — future syncs are incremental.
+
+---
+
+## 💬 Commands Reference
+
+Open the **Vault Copilot** panel from the left ribbon (🤖 icon) and use these commands:
+
+| Command | Usage | Description |
+|---|---|---|
+| `/list` | `/list` | Lists every Markdown file currently indexed in the vector store. |
+| `/find` | `/find mlops architecture` | Semantically searches for files matching a description. |
+| `/summarize_file` | `/summarize_file Biology.md` | Summarizes a single specific file from your vault. |
+| `/summarize` | `/summarize Neural Networks` | Synthesizes notes on a topic across your entire vault. |
+| `/flashcards` | `/flashcards OS_Notes.md` | Generates 5 study flashcards from the specified file. |
+| **Chat** | `What is backpropagation?` | Any non-command text triggers a full RAG chat query. |
+
+> **Tip:** Click the `/list`, `/summarize`, or `/flashcards` hint chips at the bottom of the panel to auto-fill the command prefix.
+
+---
+
+## 🔌 API Endpoints
+
+If you want to interact with the backend directly (e.g., for scripting or testing):
+
+| Method | Endpoint | Payload | Description |
+|---|---|---|---|
+| `GET` | `/sync` | — | Re-scans vault and indexes new files |
+| `GET` | `/list` | — | Returns all indexed filenames |
+| `POST` | `/chat` | `{ "message": "..." }` | General RAG chat |
+| `POST` | `/summarize` | `{ "topic": "..." }` | Topic-based summarization |
+| `POST` | `/summarize_file` | `{ "filename": "..." }` | Single-file summarization |
+| `POST` | `/flashcards` | `{ "filename": "..." }` | Flashcard generation |
+| `POST` | `/find-notes` | `{ "topic": "..." }` | Semantic file search |
+
+Interactive docs available at: `http://127.0.0.1:8000/docs`
+
+---
+
+## ⚙️ How It Works
+
+```
+Your .md files
+      │
+      ▼
+MarkdownHeaderTextSplitter   ← splits on #, ##, ###
+      │
+      ▼
+RecursiveCharacterTextSplitter  ← 512 tokens, 60 overlap
+      │
+      ▼
+Cohere embed-v4.0            ← generates dense vectors
+      │
+      ▼
+ChromaDB (cosine similarity) ← persisted to ./chroma_db
+      │
+      ▼
+Query → Retrieve top-k chunks → LangChain Chain → Gemma 2B → Response
+```
+
+On every sync, only **new files** are embedded — existing ones are skipped. This keeps your Cohere API usage minimal.
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] Delete/re-index individual files from the UI
+- [ ] Support for PDF and web clip ingestion
+- [ ] Streaming responses in the sidebar
+- [ ] Spaced repetition tracker for flashcards
+- [ ] Multi-vault support
+- [ ] Local embeddings option (eliminate Cohere dependency)
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Here's how to get started:
+
+```bash
+# 1. Fork the repo and clone your fork
+git clone https://github.com/YOUR_USERNAME/Obsidian-Recall.git
+
+# 2. Create a feature branch
+git checkout -b feature/your-feature-name
+
+# 3. Make your changes and commit
+git commit -m "feat: add your feature"
+
+# 4. Push and open a Pull Request
+git push origin feature/your-feature-name
+```
+
+Please open an issue first for major changes so we can discuss the approach.
+
+---
+
+## ⚠️ Known Limitations
+
+- The LLM (Gemma 2B) is small and fast, but may hallucinate on complex reasoning. Always verify important answers against your actual notes.
+- First-time indexing of large vaults may take several minutes depending on the number of files and your Cohere API tier.
+- The plugin currently requires `server.py` to be running manually before use.
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+---
+
+<div align="center">
+
+Built with 🧠 by [Hilal Ahmad](https://github.com/HilalAhmad01)
+
+*If this helped your study sessions, drop a ⭐ on the repo!*
+
+</div>
