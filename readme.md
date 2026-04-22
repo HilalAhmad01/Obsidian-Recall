@@ -6,9 +6,9 @@
 
 **Chat with your notes. Generate flashcards. Summarize topics. All locally.**
 
-[![Python](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/summarize%20command.png)
-[![LangChain](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/flashcard.png)
-[![ChromaDB](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/summarize%20command.png)
+[![Python](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/summarize%20command.png)]
+[![LangChain](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/flashcard.png)]
+[![ChromaDB](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/summarize%20command.png)]
 
 
 </div>
