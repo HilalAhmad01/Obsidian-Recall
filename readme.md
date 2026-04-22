@@ -7,7 +7,13 @@
 **Chat with your notes. Generate flashcards. Summarize topics. All locally.**
 
 ![Python](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/summarize%20command.png)
+
+---
+
 ![LangChain](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/flashcard.png)
+
+---
+
 ![ChromaDB](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/summarize%20command.png)
 
 
@@ -268,10 +274,4 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 ---
 
-<div align="center">
 
-Built with 🧠 by [Hilal Ahmad](https://github.com/HilalAhmad01)
-
-*If this helped your study sessions, drop a ⭐ on the repo!*
-
-</div>
