@@ -6,15 +6,6 @@
 
 **Chat with your notes. Generate flashcards. Summarize topics. All locally.**
 
-![Python](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/summarize%20command.png)
-
----
-
-![LangChain](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/flashcard.png)
-
----
-
-![ChromaDB](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/summarize%20command.png)
 
 
 </div>
@@ -31,6 +22,20 @@
 - **Find files** by describing what's in them, not by remembering the name
 
 It runs **100% locally** — your notes never leave your machine. The only external call is to the Cohere API for embeddings.
+
+---
+
+
+![Python](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/summarize%20command.png)
+
+---
+
+![LangChain](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/flashcard.png)
+
+---
+
+![ChromaDB](https://github.com/HilalAhmad01/Obsidian-Recall/blob/main/images/summarize%20command.png)
+
 
 ---
 
