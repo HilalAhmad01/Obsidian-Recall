@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🧠 Obsidian Recall
+# MINDS EYE
 
 ### An AI-powered Copilot that lives inside your Obsidian vault.
 
