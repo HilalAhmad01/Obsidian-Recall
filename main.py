@@ -6,7 +6,6 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama, OllamaEmbeddings 
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough, RunnableLambda, chain
-from langchain_community.vectorstores import Chroma
 from langchain_chroma import Chroma
 from langchain_cohere import CohereEmbeddings
 from langchain_text_splitters import MarkdownHeaderTextSplitter
@@ -82,7 +81,7 @@ def handle_summarize_file(filename, vectorstore, llm):
     
     print(f"Summarizing {os.path.basename(full_path)}...")
     response = chain.invoke("Summarize this document") 
-    print(f"\nSummary:\n{response}")
+    return response
 
 def handle_summarize_topic(topic, vectorstore, llm):
     retriever = vectorstore.as_retriever(search_kwargs={"k": 6})
@@ -105,7 +104,7 @@ def handle_summarize_topic(topic, vectorstore, llm):
     
     print(f"Gathering notes on '{topic}'...")
     response = chain.invoke(topic)
-    print(f"\nSummary of {topic}:\n{response}")
+    return response
 
 def handle_flashcards(filename, vectorstore, llm):
 
@@ -142,24 +141,17 @@ def handle_flashcards(filename, vectorstore, llm):
     
     print(f"Generating flashcards from {os.path.basename(full_path)}...")
     response = chain.invoke(os.path.basename(full_path))
-    print(f"\n✨ YOUR STUDY CARDS:\n{response}")
+    return response
 
 def getfile(description, vectorstore):
     results = vectorstore.similarity_search(description, k=3)
-    
     if not results:
-        print(f"🔍 No notes found related to: '{description}'")
-        return
-
+        return []
     found_files = set()
     for doc in results:
         full_path = doc.metadata.get('source', 'Unknown')
         found_files.add(os.path.basename(full_path))
-
-    
-    print(f"\n Files containing info about '{description}':")
-    for filename in sorted(found_files):
-        print(f"  {filename}")
+    return sorted(list(found_files))
 
 
 def get_vectorstore():
